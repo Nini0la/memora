@@ -9,18 +9,31 @@ Last Updated: 2026-04-06
 - PR review gate: no untested endpoint, scheduler rule, or evaluator logic merges.
 
 ## Current Snapshot
-- In Progress: Sprint 1 implementation (foundations complete, auth + notes core complete).
+- In Progress: Sprint 5 kickoff (dashboard + reminders pending).
 - Completed Today:
   - Added integration tests for auth flows and note input/upload edge cases.
   - Implemented backend API scaffolding (FastAPI, DB models, session auth).
   - Implemented and verified endpoints:
     - `POST /auth/signup`, `POST /auth/login`, `POST /auth/logout`, `GET /me`
-    - `POST /notes`, `POST /notes/upload` (text/plain), `GET /notes/{id}`
+    - `POST /notes`, `POST /notes/upload` (text/plain + PDF + DOCX), `GET /notes/{id}`
+    - `POST /notes/{id}/process`, `GET /notes/{id}/outline`, `GET /subtopics/{id}`
+    - `GET /subtopics/{id}/preview`, `GET /subtopics/{id}/prompts`
+    - `POST /recall/attempts`, `GET /recall/attempts/{id}`, `POST /recall/attempts/{id}/evaluate`
+    - `GET /subtopics/{id}/review-schedule`, `GET /subtopics/{id}/history`, `GET /subtopics/{id}/mastery`
+  - Implemented upload extraction with corruption handling for:
+    - invalid UTF-8 text uploads
+    - malformed PDF uploads
+    - malformed DOCX uploads
+  - Implemented deterministic evaluation scoring (`score`, `level`, `missing_concepts`, `feedback`).
+  - Implemented review schedule generation and accelerated schedule for low performance.
+  - Implemented mastery threshold evaluation (`Level >= 4` on different days).
   - Added CI workflow to run tests automatically on push/PR.
-  - Test status: `9 passed` on 2026-04-06.
+  - Test status: `30 passed` on 2026-04-06.
 - Next Immediate Gate:
-  - Expand upload extraction support to PDF/DOCX and add related tests.
-  - Add `/notes/upload` corruption handling tests for binary-but-labeled text edge cases.
+  - Add failing tests for Sprint 5 dashboard and reminders:
+    - `GET /dashboard`
+    - `GET /reviews/due`
+    - `GET /notifications`
 
 ## Implementation Roadmap (8 Weeks)
 

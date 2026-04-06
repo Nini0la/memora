@@ -1,5 +1,8 @@
 from io import BytesIO
 
+from docx import Document
+from reportlab.pdfgen import canvas
+
 
 def test_signup_login_me_logout_flow(client):
     signup_payload = {
@@ -131,3 +134,84 @@ def test_upload_unsupported_file_type(client, auth_headers):
     )
 
     assert response.status_code == 415
+
+
+def test_upload_invalid_utf8_text_rejected(client, auth_headers):
+    response = client.post(
+        "/notes/upload",
+        headers=auth_headers,
+        files={"file": ("bad.txt", BytesIO(b"\xff\xfe\xfd"), "text/plain")},
+    )
+
+    assert response.status_code == 400
+
+
+def test_upload_pdf_note_extracts_text(client, auth_headers):
+    pdf_blob = BytesIO()
+    pdf = canvas.Canvas(pdf_blob)
+    pdf.drawString(72, 720, "OSI model has seven layers")
+    pdf.save()
+    pdf_blob.seek(0)
+
+    response = client.post(
+        "/notes/upload",
+        headers=auth_headers,
+        files={"file": ("osi.pdf", pdf_blob, "application/pdf")},
+        data={"title": "OSI"},
+    )
+
+    assert response.status_code == 201
+    body = response.json()
+    assert body["source_type"] == "upload"
+    assert "seven layers" in body["raw_text"].lower()
+
+
+def test_upload_docx_note_extracts_text(client, auth_headers):
+    docx_blob = BytesIO()
+    doc = Document()
+    doc.add_paragraph("B-tree indexes improve lookup performance")
+    doc.save(docx_blob)
+    docx_blob.seek(0)
+
+    response = client.post(
+        "/notes/upload",
+        headers=auth_headers,
+        files={
+            "file": (
+                "indexes.docx",
+                docx_blob,
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
+        },
+    )
+
+    assert response.status_code == 201
+    body = response.json()
+    assert body["source_type"] == "upload"
+    assert "b-tree indexes" in body["raw_text"].lower()
+
+
+def test_upload_corrupted_pdf_rejected(client, auth_headers):
+    response = client.post(
+        "/notes/upload",
+        headers=auth_headers,
+        files={"file": ("bad.pdf", BytesIO(b"not-a-real-pdf"), "application/pdf")},
+    )
+
+    assert response.status_code == 400
+
+
+def test_upload_corrupted_docx_rejected(client, auth_headers):
+    response = client.post(
+        "/notes/upload",
+        headers=auth_headers,
+        files={
+            "file": (
+                "bad.docx",
+                BytesIO(b"not-a-real-docx"),
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
+        },
+    )
+
+    assert response.status_code == 400
