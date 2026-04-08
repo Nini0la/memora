@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+:root {
+  --ink: #101628;
+  --muted: #5f6b84;
+  --accent: #ff6a3d;
+  --accent-deep: #d84c1f;
+  --card: #ffffff;
+  --bg-a: #f8f3e8;
+  --bg-b: #dce8ff;
+  --shadow: 0 20px 50px rgba(10, 18, 36, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Avenir Next', 'Segoe UI', sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at 15% 15%, var(--bg-a), transparent 45%),
+    radial-gradient(circle at 85% 0%, var(--bg-b), transparent 50%),
+    #f2f4f8;
+}
+
+h1,
+h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  margin: 0;
+}
+
+.screen {
+  min-height: 100vh;
+  padding: 2rem 1.2rem;
+}
+
+.auth-screen,
+.workspace-screen {
+  display: grid;
+  place-items: center;
+}
+
+.auth-panel,
+.workspace-card,
+.workspace-header {
+  width: min(740px, 100%);
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+.auth-panel,
+.workspace-card {
+  padding: 1.4rem;
+}
+
+.workspace-header {
+  margin-bottom: 1rem;
+  padding: 1rem 1.3rem;
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.subtitle {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+}
+
+.auth-form,
+.note-form {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+textarea {
+  border: 1px solid #c8d0dd;
+  border-radius: 12px;
+  padding: 0.7rem 0.8rem;
+  background: #fbfcff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 9rem;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-deep));
+  color: white;
+  padding: 0.72rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mode-switch,
+.logout {
+  margin-top: 0.8rem;
+  width: auto;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid #d4dce8;
+}
+
+@media (max-width: 720px) {
+  .screen {
+    padding: 1rem;
+  }
+
+  .auth-panel,
+  .workspace-card,
+  .workspace-header {
+    border-radius: 14px;
+  }
+}

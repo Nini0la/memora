@@ -1,6 +1,6 @@
 # Memora MVP Implementation Status
 
-Last Updated: 2026-04-06
+Last Updated: 2026-04-07
 
 ## Execution Policy (Mandatory)
 - Test-first development is required for all MVP features.
@@ -9,7 +9,7 @@ Last Updated: 2026-04-06
 - PR review gate: no untested endpoint, scheduler rule, or evaluator logic merges.
 
 ## Current Snapshot
-- In Progress: Sprint 5 kickoff (dashboard + reminders pending).
+- In Progress: Sprint 5 kickoff (dashboard + reminders pending) and Frontend Slice 2 planning.
 - Completed Today:
   - Added integration tests for auth flows and note input/upload edge cases.
   - Implemented backend API scaffolding (FastAPI, DB models, session auth).
@@ -27,13 +27,34 @@ Last Updated: 2026-04-06
   - Implemented deterministic evaluation scoring (`score`, `level`, `missing_concepts`, `feedback`).
   - Implemented review schedule generation and accelerated schedule for low performance.
   - Implemented mastery threshold evaluation (`Level >= 4` on different days).
-  - Added CI workflow to run tests automatically on push/PR.
-  - Test status: `30 passed` on 2026-04-06.
+  - Added React + TypeScript frontend scaffold in `frontend/`.
+  - Implemented frontend Auth + Notes slice:
+    - signup/login toggle UI
+    - notes workspace paste form
+    - backend integration for auth and `POST /notes`
+    - session persistence via `localStorage`
+  - Added frontend tests (Vitest + Testing Library) for:
+    - unauthenticated auth form rendering
+    - login flow transition into notes workspace
+    - paste note request shape with bearer token
+  - Expanded CI workflow to run both backend and frontend test jobs.
+  - Test status: backend `30 passed`; frontend `3 passed` on 2026-04-07.
 - Next Immediate Gate:
   - Add failing tests for Sprint 5 dashboard and reminders:
     - `GET /dashboard`
     - `GET /reviews/due`
     - `GET /notifications`
+  - Add Frontend Slice 2 (Structuring + Preview):
+    - processed outline page
+    - subtopic preview with “Start Recall Training” CTA
+    - route wiring and API integration
+
+## Frontend Workstream (Vertical Slices)
+- Slice 1 (Done): Auth + Notes input UI wired to backend.
+- Slice 2 (Next): Outline + preview UI for processed notes.
+- Slice 3: Recall answer submission + evaluation result UI.
+- Slice 4: Dashboard + due reviews + notification panel.
+- Slice 5: Responsive polish, E2E flows, accessibility pass.
 
 ## Implementation Roadmap (8 Weeks)
 
